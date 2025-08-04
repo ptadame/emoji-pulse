@@ -1,3 +1,3 @@
-FROM apify/actor-node-basic:18
+FROM apify/actor-node:18
 COPY . ./
 CMD npm start
