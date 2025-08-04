@@ -1,0 +1,12 @@
+{
+  "name": "emoji-pulse",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "apify": "^3.0.0",
+    "node-fetch": "^3.4.0"
+  }
+}
