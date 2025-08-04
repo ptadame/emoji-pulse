@@ -1,25 +1,18 @@
-import { Actor } from 'apify';
+const Apify = require('apify');
 
-await Actor.init();
+Apify.main(async () => {
+    const input     = await Apify.getInput() || {};
+    const country   = input.country  || 'US';
+    const daysBack  = input.daysBack || 7;
 
-// ─────────────────────────────
-// INPUT PARAMETERS (from Apify “Input” tab or API call)
-const {
-    country   = 'US',   // e.g. "US", "GB", "JP"
-    daysBack  = 7       // e.g. 7, 30
-} = await Actor.getInput() ?? {};
-// ─────────────────────────────
+    console.log(`⏩  Fetching trending emojis for ${country}, last ${daysBack} days…`);
 
-// TODO: replace the block below with your real emoji-trend fetch
-console.log(`⏩  Fetching trending emojis for ${country}, last ${daysBack} days…`);
-const dummy = [
-    { emoji: '😂', score: 98 },
-    { emoji: '🔥', score: 95 },
-    { emoji: '😭', score: 93 },
-];
-// END TODO
+    // placeholder result
+    const dummy = [
+        { emoji: '😂', score: 98 },
+        { emoji: '🔥', score: 95 },
+        { emoji: '😭', score: 93 }
+    ];
 
-// store the result so users / API callers can download it
-await Actor.setValue('RESULT', dummy);
-
-await Actor.exit();
+    await Apify.setValue('RESULT', dummy);
+});
