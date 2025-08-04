@@ -15,7 +15,6 @@
  */
 
 const Apify      = require('apify');       // Apify SDK (CommonJS flavour)
-const fetch      = require('node-fetch');  // HTTP client
 const emojiRegex = require('emoji-regex'); // Regex util
 
 Apify.main(async () => {
