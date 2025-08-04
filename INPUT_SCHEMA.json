@@ -9,8 +9,7 @@
   "default": "US",
   "editor": "textfield",
   "description": "ISO-alpha-2 country code, e.g. US, GB, JP."
-}
-,
+},
     "daysBack": {
       "title": "Days back",
       "type": "integer",
