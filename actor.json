@@ -1,0 +1,9 @@
+{
+  "title": "Emoji Pulse",
+  "description": "Fetches today's trending TikTok emojis.",
+  "version": "0.0.1",
+  "environmentVariables": [],
+  "dockerfile": "./Dockerfile",
+  "script": "main.js",
+  "actorSpecification": 1
+}
