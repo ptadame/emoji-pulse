@@ -1,15 +1,11 @@
-import Apify from 'apify';
-import fetch from 'node-fetch';
+import { Actor } from 'apify';
 
-Apify.main(async () => {
-    console.log('▶ Emoji-Pulse actor started');
+await Actor.init();
 
-    // ---- placeholder logic ---------------------------------
-    const resp = await fetch('https://emojihub.yurace.pro/api/random');
-    const json = await resp.json();
-    // Save to default dataset so you can see output
-    await Apify.pushData(json);
-    // --------------------------------------------------------
+const { country = 'US', daysBack = 7 } = await Actor.getInput() ?? {};
 
-    console.log('✅ Done, pushed 1 record to the dataset');
-});
+console.log(`Fetching emojis for ${country}, last ${daysBack} days…`);
+/* your scraping code goes here */
+
+await Actor.setValue('OUTPUT', { ok: true });
+await Actor.exit();
