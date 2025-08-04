@@ -2,7 +2,6 @@
   "name": "emoji-pulse",
   "version": "0.0.1",
   "description": "Fetch trending TikTok emojis",
-  "type": "module",
   "main": "main.js",
   "scripts": {
     "start": "node main.js"
