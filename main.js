@@ -1,47 +1,40 @@
 /**
- * main.js  –  Emoji-Pulse v0.1
+ * main.js — Emoji-Pulse v0.1 (SDK v3 style)
  * ---------------------------------------------
- * 1. Reads `country` and `daysBack` from the Actor input.
- * 2. Downloads trending-video metadata from TikTok Creative Center.
- * 3. Counts every Unicode emoji that appears in video captions.
- * 4. Saves a Top-10 array into RESULT.json and also stores
- *    a one-line summary in the default dataset.
- *
- * NOTE — TikTok’s Creative-Center endpoints change often.
- * If the fetch below stops working, replace `TREND_URL`
- * with either:
- *   • your own Apify “TikTok trending-videos” dataset URL, or
- *   • any other JSON feed that contains video captions.
+ * 1. Reads `country` + `daysBack` from actor input
+ * 2. Downloads trending-video data from TikTok Creative Center
+ * 3. Counts every Unicode emoji in the captions
+ * 4. Saves a Top-10 list to RESULT.json and pushes one row to the dataset
  */
 
-const Apify      = require('apify');       // Apify SDK (CommonJS flavour)
-const emojiRegex = require('emoji-regex'); // Regex util
+const { Actor }  = require('apify');      // <-- note the destructuring!
+const emojiRegex = require('emoji-regex'); // regex helper
 
-Apify.main(async () => {
-    /* 1 ─────────────────────────────────────────────── INPUT */
-    const input            = await Apify.getInput() || {};
-    const country          = input.country  || 'US';   // "US", "GB", ...
-    const daysBack         = input.daysBack || 7;      // 1-30
+Actor.main(async () => {
+    /* 1 — INPUT */
+    const input     = await Actor.getInput() ?? {};
+    const country   = input.country  || 'US';
+    const daysBack  = input.daysBack || 7;
 
     console.log(`⏩  Fetching trending emojis for ${country}, last ${daysBack} days…`);
 
-    /* 2 ─────────────────────────────────────── DOWNLOAD DATA */
+    /* 2 — DOWNLOAD DATA (replace TREND_URL later with your own source) */
     const TREND_URL =
       `https://business-api.tiktok.com/open_api/v1/creative_center/video/trending/` +
       `?country_code=${country}&days=${daysBack}&page_size=200`;
 
     let videos = [];
     try {
-        const resp  = await fetch(TREND_URL);
-        const json  = await resp.json();
-        videos      = json?.data?.videos || [];
+        const res  = await fetch(TREND_URL);
+        const json = await res.json();
+        videos     = json?.data?.videos ?? [];
         console.log(`ℹ️  Received ${videos.length} video records`);
     } catch (err) {
-        console.error('❌  Unable to fetch TikTok data:', err.message);
+        console.error('❌  Fetch failed:', err.message);
         throw err;
     }
 
-    /* 3 ────────────────────────────────────── EMOJI ANALYTICS */
+    /* 3 — EMOJI COUNTING */
     const counts = Object.create(null);
     const rx     = emojiRegex();
 
@@ -56,11 +49,11 @@ Apify.main(async () => {
     const top10 = Object.entries(counts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10)
-        .map(([emoji, count], idx) => ({ rank: idx + 1, emoji, count }));
+        .map(([emoji, count], i) => ({ rank: i + 1, emoji, count }));
 
-    /* 4 ─────────────────────────────────────────────── OUTPUT */
-    await Apify.setValue('RESULT', top10);        // key-value store
-    await Apify.pushData({ country, daysBack, top10 });  // dataset row
+    /* 4 — OUTPUT */
+    await Actor.setValue('RESULT', top10);             // key-value store
+    await Actor.pushData({ country, daysBack, top10 }); // dataset row
 
     console.log('✅  Top-10 emojis saved:', top10);
 });
