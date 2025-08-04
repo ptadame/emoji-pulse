@@ -3,12 +3,14 @@
   "type": "object",
   "schemaVersion": 1,
   "properties": {
-    "country": {
-      "title": "Country",
-      "type": "string",
-      "default": "US",
-      "description": "ISO-2 code of the country whose emoji trends you want."
-    },
+ "country": {
+  "title": "Country",
+  "type": "string",
+  "default": "US",
+  "editor": "textfield",
+  "description": "ISO-alpha-2 country code, e.g. US, GB, JP."
+}
+,
     "daysBack": {
       "title": "Days back",
       "type": "integer",
