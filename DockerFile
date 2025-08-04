@@ -1,0 +1,3 @@
+FROM apify/actor-node-basic
+COPY . ./
+CMD npm start
