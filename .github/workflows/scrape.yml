@@ -1,0 +1,25 @@
+name: Daily Emoji Scrape
+
+on:
+  schedule:
+    - cron:  '0 8 * * *'   # every day at 08:00 UTC
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Run scraper and commit data
+        run: |
+          npm install node-fetch@2
+          node ./scripts/scrape.js data/emojis-$(date +%F).json
+      - name: Commit JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/*.json
+          git commit -m "Add daily emoji data for $(date +%F)" || echo "No changes to commit"
+          git push
